@@ -1,0 +1,35 @@
+{% extends 'empleados/base.html' %}
+{% block title %}Detalles del No Break {{ no_break.ID_BREAK }} - Zurich Pharma{% endblock %}
+{% block content %}
+<div class="table-container">
+    <h2>Detalles del No Break {{ no_break.ID_BREAK }}</h2>
+    <table>
+        <tr><th>ID No Break</th><td>{{ no_break.ID_BREAK }}</td></tr>
+        <tr><th>Estado</th><td>{{ no_break.ESTADO|default:'-' }}</td></tr>
+        <tr><th>Razón Social</th><td>{{ no_break.RAZON_SOCIAL|default:'-' }}</td></tr>
+        <tr><th>Marca</th><td>{{ no_break.MARCA|default:'-' }}</td></tr>
+        <tr><th>Modelo</th><td>{{ no_break.MODELO|default:'-' }}</td></tr>
+        <tr><th>Número de Serie</th><td>{{ no_break.NUM_SERIE|default:'-' }}</td></tr>
+        <tr><th>Observaciones</th><td>{{ no_break.OBSERVATIONS|default:'-' }}</td></tr>
+        <tr><th>Documentos</th><td>{% if no_break.DOCUMENTOS %}<a href="{{ no_break.DOCUMENTOS.url }}" target="_blank">Ver Documento</a>{% else %}-{% endif %}</td></tr>
+    </table>
+    {% if id_list and id_list|length > 1 %}
+    <div class="navigation-buttons">
+        <button onclick="window.location.href='{% url 'activos:ver_no_break' id_list.0 %}'" class="nav-btn">Primero</button>
+        <button onclick="window.location.href='{% url 'activos:ver_no_break' prev_id %}'" class="nav-btn" {% if not prev_id %}disabled{% endif %}>Atrás</button>
+        <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        <button onclick="window.location.href='{% url 'activos:ver_no_break' next_id %}'" class="nav-btn" {% if not next_id %}disabled{% endif %}>Siguiente</button>
+        <button onclick="window.location.href='{% url 'activos:ver_no_break' id_list|last %}'" class="nav-btn">Último</button>
+    </div>
+    {% endif %}
+    <div class="modal-actions">
+        <a href="{% url 'activos:gestionar_no_break_edit' no_break.ID_BREAK %}" class="nav-btn">Editar</a>
+        <a href="{% url 'activos:eliminar_no_break' no_break.ID_BREAK %}" class="delete-btn" onclick="return confirm('¿Estás seguro de eliminar este No Break?');">Eliminar</a>
+    </div>
+    <form method="POST" style="display:none;">
+        {% csrf_token %}
+        <input type="text" name="q" id="search-input">
+        <button type="submit" id="search-button">Buscar</button>
+    </form>
+</div>
+{% endblock %}

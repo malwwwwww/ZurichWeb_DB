@@ -1,0 +1,20 @@
+{% extends 'empleados/base.html' %}
+{% block title %}Eliminar {{ tipo|slice:":-1" }} - Zurich Pharma{% endblock %}
+{% block content %}
+<div class="table-container">
+    <h2>¿Estás seguro de eliminar el {{ tipo|slice:":-1" }} ID {{ activo.id }}?</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="modal-actions">
+            <button type="submit" class="delete-btn">Sí, eliminar</button>
+            {% if tipo == "EQUIPOS" %}
+                <a href="{% url 'activos:ver_equipos' %}" class="nav-btn">Cancelar</a>
+            {% elif tipo == "MONITORES" %}
+                <a href="{% url 'activos:ver_monitores' %}" class="nav-btn">Cancelar</a>
+            {% elif tipo == "NO_BREAKS" %}
+                <a href="{% url 'activos:ver_no_breaks' %}" class="nav-btn">Cancelar</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

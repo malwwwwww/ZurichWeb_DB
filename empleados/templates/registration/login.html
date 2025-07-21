@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+     <html lang="es">
+     <head>
+         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title>Iniciar Sesión - Zurich Pharma</title>
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+         <style>
+             *, *::before, *::after {
+                 box-sizing: border-box;
+             }
+             body {
+                 margin: 0;
+                 font-family: 'Segoe UI', sans-serif;
+                 background: #f5f9ff;
+                 color: #333;
+                 display: flex;
+                 justify-content: center;
+                 align-items: center;
+                 height: 100vh;
+             }
+             .login-container {
+                 background: rgba(255,255,255,.92);
+                 border: 1px solid #dbeafe;
+                 border-radius: 18px;
+                 box-shadow: 0 12px 32px rgba(0,0,0,.2);
+                 padding: 32px 38px;
+                 width: 100%;
+                 max-width: 400px;
+             }
+             .login-container h2 {
+                 color: #1a2a47;
+                 text-align: center;
+                 margin-bottom: 24px;
+             }
+             .form-col {
+                 display: flex;
+                 flex-direction: column;
+                 gap: 15px;
+             }
+             .form-col label {
+                 font-weight: bold;
+                 color: #1a2a47;
+             }
+             .form-col input {
+                 padding: 10px;
+                 border: 1px solid #dbeafe;
+                 border-radius: 6px;
+                 font-size: 14px;
+             }
+             .form-col input:focus {
+                 outline: none;
+                 border-color: #1a2a47;
+             }
+             .error-message {
+                 color: #dc3545;
+                 text-align: center;
+                 margin-bottom: 15px;
+                 font-size: 14px;
+             }
+             .submit-btn {
+                 background: #1a2a47;
+                 color: #fff;
+                 border: none;
+                 border-radius: 6px;
+                 padding: 10px 24px;
+                 font-size: 14px;
+                 cursor: pointer;
+                 margin-top: 20px;
+             }
+             .submit-btn:hover {
+                 background: #223b60;
+             }
+         </style>
+     </head>
+     <body>
+         <div class="login-container">
+             <h2>Iniciar Sesión</h2>
+             {% if form.errors %}
+                 <p class="error-message">Usuario o contraseña incorrectos. Por favor, intenta de nuevo.</p>
+             {% endif %}
+             <form method="post" action="{% url 'login' %}">
+                 {% csrf_token %}
+                 <div class="form-col">
+                     <label for="username">Usuario:</label>
+                     <input type="text" name="username" id="username" required>
+                     <label for="password">Contraseña:</label>
+                     <input type="password" name="password" id="password" required>
+                 </div>
+                 <div style="text-align: center;">
+                     <button type="submit" class="submit-btn">Iniciar Sesión</button>
+                 </div>
+                 <input type="hidden" name="next" value="{{ next }}">
+             </form>
+         </div>
+     </body>
+     </html>

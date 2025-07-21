@@ -1,0 +1,262 @@
+{% extends 'empleados/base.html' %}
+{% block title %}{% if equipo %}Editar Equipo {{ equipo.ID_EQUIPO }}{% else %}Crear Nuevo Equipo{% endif %} - Zurich Pharma{% endblock %}
+{% block content %}
+<div class="table-container">
+    <h2>{% if equipo %}Editar Equipo {{ equipo.ID_EQUIPO }}{% else %}Crear Nuevo Equipo{% endif %}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-grid">
+            <div class="form-col">
+                <label for="ID_EQUIPO">ID Equipo:</label>
+                <input type="text" name="ID_EQUIPO" id="id_equipo" value="{{ equipo.ID_EQUIPO|default:'' }}" {% if equipo %}readonly{% endif %} required>
+                
+                <label for="ESTADO">Estado:</label>
+                <select name="ESTADO" id="estado" required>
+                    <option value="" disabled {% if not equipo.ESTADO %}selected{% endif %}>Selecciona un estado</option>
+                    <option value="Activo" {% if equipo.ESTADO == 'Activo' %}selected{% endif %}>Activo</option>
+                    <option value="Inactivo" {% if equipo.ESTADO == 'Inactivo' %}selected{% endif %}>Inactivo</option>
+                </select>
+                
+                <label for="TIPO_EQUIPO">Tipo Equipo:</label>
+                <select name="TIPO_EQUIPO" id="tipo_equipo" {% if equipo %}disabled{% endif %} required>
+                    <option value="" disabled {% if not equipo.TIPO_EQUIPO %}selected{% endif %}>Selecciona un tipo</option>
+                    <option value="Computadora" {% if equipo.TIPO_EQUIPO == 'Computadora' %}selected{% endif %}>Computadora</option>
+                    <option value="Laptop" {% if equipo.TIPO_EQUIPO == 'Laptop' %}selected{% endif %}>Laptop</option>
+                    <option value="CPU" {% if equipo.TIPO_EQUIPO == 'CPU' %}selected{% endif %}>CPU</option>
+                    <option value="All in One" {% if equipo.TIPO_EQUIPO == 'All in One' %}selected{% endif %}>All in One</option>
+                    <option value="iMac" {% if equipo.TIPO_EQUIPO == 'iMac' %}selected{% endif %}>iMac</option>
+                    <option value="Tablet" {% if equipo.TIPO_EQUIPO == 'Tablet' %}selected{% endif %}>Tablet</option>
+                    <option value="iPad" {% if equipo.TIPO_EQUIPO == 'iPad' %}selected{% endif %}>iPad</option>
+                    <option value="Proyector" {% if equipo.TIPO_EQUIPO == 'Proyector' %}selected{% endif %}>Proyector</option>
+                    <option value="Impresora" {% if equipo.TIPO_EQUIPO == 'Impresora' %}selected{% endif %}>Impresora</option>
+                    <option value="Multifuncional" {% if equipo.TIPO_EQUIPO == 'Multifuncional' %}selected{% endif %}>Multifuncional</option>
+                    <option value="Servidor" {% if equipo.TIPO_EQUIPO == 'Servidor' %}selected{% endif %}>Servidor</option>
+                    <option value="Switch A" {% if equipo.TIPO_EQUIPO == 'Switch A' %}selected{% endif %}>Switch A</option>
+                    <option value="Switch N/A" {% if equipo.TIPO_EQUIPO == 'Switch N/A' %}selected{% endif %}>Switch N/A</option>
+                    <option value="Firewall" {% if equipo.TIPO_EQUIPO == 'Firewall' %}selected{% endif %}>Firewall</option>
+                    <option value="Pantalla" {% if equipo.TIPO_EQUIPO == 'Pantalla' %}selected{% endif %}>Pantalla</option>
+                    <option value="Monitor" {% if equipo.TIPO_EQUIPO == 'Monitor' %}selected{% endif %}>Monitor</option>
+                    <option value="Access Point" {% if equipo.TIPO_EQUIPO == 'Access Point' %}selected{% endif %}>Access Point</option>
+                    <option value="No break" {% if equipo.TIPO_EQUIPO == 'No break' %}selected{% endif %}>No break</option>
+                    <option value="Teléfono" {% if equipo.TIPO_EQUIPO == 'Teléfono' %}selected{% endif %}>Teléfono</option>
+                    <option value="Cámara de vigilancia" {% if equipo.TIPO_EQUIPO == 'Cámara de vigilancia' %}selected{% endif %}>Cámara de vigilancia</option>
+                    <option value="Cámara fotográfica" {% if equipo.TIPO_EQUIPO == 'Cámara fotográfica' %}selected{% endif %}>Cámara fotográfica</option>
+                    <option value="Enlace dedicado" {% if equipo.TIPO_EQUIPO == 'Enlace dedicado' %}selected{% endif %}>Enlace dedicado</option>
+                    <option value="Celular" {% if equipo.TIPO_EQUIPO == 'Celular' %}selected{% endif %}>Celular</option>
+                    <option value="Checador" {% if equipo.TIPO_EQUIPO == 'Checador' %}selected{% endif %}>Checador</option>
+                    <option value="Escaner" {% if equipo.TIPO_EQUIPO == 'Escaner' %}selected{% endif %}>Escaner</option>
+                    <option value="Plotter" {% if equipo.TIPO_EQUIPO == 'Plotter' %}selected{% endif %}>Plotter</option>
+                    <option value="NAS" {% if equipo.TIPO_EQUIPO == 'NAS' %}selected{% endif %}>NAS</option>
+                    <option value="DVR" {% if equipo.TIPO_EQUIPO == 'DVR' %}selected{% endif %}>DVR</option>
+                    <option value="NVR" {% if equipo.TIPO_EQUIPO == 'NVR' %}selected{% endif %}>NVR</option>
+                    <option value="Módem" {% if equipo.TIPO_EQUIPO == 'Módem' %}selected{% endif %}>Módem</option>
+                    <option value="Conmutador" {% if equipo.TIPO_EQUIPO == 'Conmutador' %}selected{% endif %}>Conmutador</option>
+                    <option value="FAX" {% if equipo.TIPO_EQUIPO == 'FAX' %}selected{% endif %}>FAX</option>
+                    <option value="Etiquetadora" {% if equipo.TIPO_EQUIPO == 'Etiquetadora' %}selected{% endif %}>Etiquetadora</option>
+                    <option value="Radio" {% if equipo.TIPO_EQUIPO == 'Radio' %}selected{% endif %}>Radio</option>
+                    <option value="Alarmas" {% if equipo.TIPO_EQUIPO == 'Alarmas' %}selected{% endif %}>Alarmas</option>
+                </select>
+                
+                <label for="RAZON_SOCIAL">Razón Social:</label>
+                <input type="text" name="RAZON_SOCIAL" value="{{ equipo.RAZON_SOCIAL|default:'' }}" required>
+                
+                <label for="UBICACION">Ubicación:</label>
+                <input type="text" name="UBICACION" value="{{ equipo.UBICACION|default:'' }}">
+                
+                <label for="SITUACION">Situación:</label>
+                <input type="text" name="SITUACION" value="{{ equipo.SITUACION|default:'' }}">
+                
+                <label for="PROVEEDOR">Proveedor:</label>
+                <input type="text" name="PROVEEDOR" value="{{ equipo.PROVEEDOR|default:'' }}">
+                
+                <label for="MARCA">Marca:</label>
+                <input type="text" name="MARCA" value="{{ equipo.MARCA|default:'' }}">
+                
+                <label for="MODELO">Modelo:</label>
+                <input type="text" name="MODELO" value="{{ equipo.MODELO|default:'' }}">
+                
+                <label for="SERIE">Serie:</label>
+                <input type="text" name="SERIE" value="{{ equipo.SERIE|default:'' }}">
+                
+                <label for="LINEA_TEL">Línea Tel:</label>
+                <input type="text" name="LINEA_TEL" value="{{ equipo.LINEA_TEL|default:'' }}">
+                
+                <label for="IMEI">IMEI:</label>
+                <input type="text" name="IMEI" value="{{ equipo.IMEI|default:'' }}">
+                
+                <label for="COMPANIA">Compañía:</label>
+                <input type="text" name="COMPANIA" value="{{ equipo.COMPANIA|default:'' }}">
+                
+                <label for="PROCESADOR">Procesador:</label>
+                <input type="text" name="PROCESADOR" value="{{ equipo.PROCESADOR|default:'' }}">
+                
+                <label for="RAM_1">RAM 1:</label>
+                <input type="text" name="RAM_1" value="{{ equipo.RAM_1|default:'' }}">
+            </div>
+            <div class="form-col">
+                <label for="RAM_2">RAM 2:</label>
+                <input type="text" name="RAM_2" value="{{ equipo.RAM_2|default:'' }}">
+                
+                <label for="DISCO_1">Disco 1:</label>
+                <input type="text" name="DISCO_1" value="{{ equipo.DISCO_1|default:'' }}">
+                
+                <label for="DISCO_2">Disco 2:</label>
+                <input type="text" name="DISCO_2" value="{{ equipo.DISCO_2|default:'' }}">
+                
+                <label for="SISTEMA_OPERATIVO">Sistema Operativo:</label>
+                <input type="text" name="SISTEMA_OPERATIVO" value="{{ equipo.SISTEMA_OPERATIVO|default:'' }}">
+                
+                <label for="OBSERVATIONS">Observaciones:</label>
+                <input type="text" name="OBSERVATIONS" value="{{ equipo.OBSERVATIONS|default:'' }}">
+                
+                <label for="MAC_WIFI1">MAC WiFi 1:</label>
+                <input type="text" name="MAC_WIFI1" value="{{ equipo.MAC_WIFI1|default:'' }}">
+                
+                <label for="MAC_WIFI2">MAC WiFi 2:</label>
+                <input type="text" name="MAC_WIFI2" value="{{ equipo.MAC_WIFI2|default:'' }}">
+                
+                <label for="MAC_ETHERNET1">MAC Ethernet 1:</label>
+                <input type="text" name="MAC_ETHERNET1" value="{{ equipo.MAC_ETHERNET1|default:'' }}">
+                
+                <label for="MAC_ETHERNET2">MAC Ethernet 2:</label>
+                <input type="text" name="MAC_ETHERNET2" value="{{ equipo.MAC_ETHERNET2|default:'' }}">
+                
+                <label for="DEPARTAMENTO_ASIGNADO">Departamento Asignado:</label>
+                <input type="text" name="DEPARTAMENTO_ASIGNADO" value="{{ equipo.DEPARTAMENTO_ASIGNADO|default:'' }}">
+                
+                <label for="FECHA_ALTA">Fecha Alta:</label>
+                <input type="datetime-local" name="FECHA_ALTA" id="fecha_alta">
+                
+                <label for="FOTO">Foto:</label>
+                <input type="file" name="FOTO" accept="image/*">
+                
+                <label for="DOCUMENTOS">Documentos (PDF):</label>
+                <input type="file" name="DOCUMENTOS" accept=".pdf">
+                
+                <label for="ANTIVIRUS">Antivirus:</label>
+                <input type="text" name="ANTIVIRUS" value="{{ equipo.ANTIVIRUS|default:'' }}">
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button type="submit" class="submit-btn">Guardar</button>
+            <a href="{% url 'activos:ver_equipos' %}" class="cancel-btn">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const now = new Date();
+        const offset = now.getTimezoneOffset();
+        const adjustedDate = new Date(now.getTime() - (offset * 60 * 1000));
+        const formatted = adjustedDate.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM
+        document.getElementById('fecha_alta').value = formatted;
+
+        {% if not equipo %}
+        const tipoEquipoToNomenclatura = {
+            "Computadora": "EQC-",
+            "Laptop": "EQC-",
+            "CPU": "EQC-",
+            "All in One": "EQC-",
+            "iMac": "EQC-",
+            "Tablet": "EEP-",
+            "iPad": "EEP-",
+            "Proyector": "EQP-",
+            "Impresora": "EQI-",
+            "Multifuncional": "EQI-",
+            "Servidor": "EDP-",
+            "Switch A": "EQS-",
+            "Switch N/A": "EQS-",
+            "Firewall": "ECF-",
+            "Pantalla": "ETV-",
+            "Monitor": "EQM-",
+            "Access Point": "EQW-",
+            "No break": "EQB-",
+            "Teléfono": "EQT-",
+            "Cámara de vigilancia": "EQV-",
+            "Cámara fotográfica": "EQF-",
+            "Enlace dedicado": "EED-",
+            "Celular": "ETM-",
+            "Checador": "ECH-",
+            "Escaner": "EQE-",
+            "Plotter": "EPL-",
+            "NAS": "NAS-",
+            "DVR": "DVR-",
+            "NVR": "NVR-",
+            "Módem": "DCS-",
+            "Conmutador": "DER-",
+            "FAX": "FAX-",
+            "Etiquetadora": "EQI-",
+            "Radio": "EQR-",
+            "Alarmas": "ALA-"
+        };
+
+        document.getElementById('tipo_equipo').addEventListener('change', function() {
+            const tipo = this.value;
+            const idEquipoInput = document.getElementById('id_equipo');
+            const nomenclatura = tipoEquipoToNomenclatura[tipo] || '';
+            // Preserve the numeric part if it exists, else start with just the prefix
+            const currentId = idEquipoInput.value;
+            const numericPart = currentId.match(/\d+$/) ? currentId.match(/\d+$/)[0] : '';
+            idEquipoInput.value = nomenclatura + numericPart;
+        });
+        {% endif %}
+    });
+</script>
+
+<style>
+    .table-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Two equal columns */
+        gap: 30px;
+    }
+
+    .form-col {
+        display: grid;
+        grid-template-columns: 200px 1fr; /* Label and input width */
+        gap: 15px;
+        align-items: center;
+    }
+
+    .form-col label {
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .form-col input, .form-col select {
+        padding: 8px;
+        border: 1px solid #1a2a47;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    .modal-actions {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .submit-btn, .cancel-btn {
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-right: 10px;
+    }
+
+    .submit-btn {
+        background: #1a2a47;
+        color: white;
+        border: none;
+    }
+
+    .cancel-btn {
+        background: #6b7280;
+        color: white;
+    }
+
+    .submit-btn:hover, .cancel-btn:hover {
+        opacity: 0.9;
+    }
+</style>
+{% endblock %}

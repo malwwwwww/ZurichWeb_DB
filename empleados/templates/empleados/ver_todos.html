@@ -1,0 +1,120 @@
+{% extends 'empleados/base.html' %}
+{% block title %}Ver Todos los Empleados - Zurich Pharma{% endblock %}
+{% block content %}
+<div class="table-container">
+    <h2>Lista de Empleados</h2>
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Empleado</th>
+                    <th>Número Oficial</th>
+                    <th>Número Provisional</th>
+                    <th>Nombre</th>
+                    <th>Apellido Paterno</th>
+                    <th>Apellido Materno</th>
+                    <th>Nombre Completo</th>
+                    <th>Sexo</th>
+                    <th>Estado</th>
+                    <th>Fecha Alta</th>
+                    <th>Usuario Última Modificación</th>
+                    <th>Fecha Contratación</th>
+                    <th>Fecha Baja</th>
+                    <th>Departamento</th>
+                    <th>Puesto</th>
+                    <th>Centro Costo</th>
+                    <th>Sucursal</th>
+                    <th>Plan</th>
+                    <th>Teléfono Trabajo</th>
+                    <th>Teléfono Celular</th>
+                    <th>Teléfono Otro</th>
+                    <th>Email</th>
+                    <th>Horario Comedor</th>
+                    <th>Turno</th>
+                    <th>Foto</th>
+                    <th>Jefe Inmediato</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for empleado in page_obj %}
+                <tr>
+                    <td>{{ empleado.id_empleado }}</td>
+                    <td>{{ empleado.num_oficial }}</td>
+                    <td>{{ empleado.num_provicional }}</td>
+                    <td>{{ empleado.nombre|default:"-" }}</td>
+                    <td>{{ empleado.apellido_paterno|default:"-" }}</td>
+                    <td>{{ empleado.apellido_materno|default:"-" }}</td>
+                    <td>{{ empleado.nombre_completo|default:"-" }}</td>
+                    <td>{{ empleado.sexo|default:"-" }}</td>
+                    <td>{{ empleado.estado }}</td>
+                    <td>{{ empleado.fecha_alta|date:"Y-m-d"|default:"-" }}</td>
+                    <td>{{ empleado.usuario_ultima_modificacion|default:"-" }}</td>
+                    <td>{{ empleado.fecha_contratacion|date:"Y-m-d"|default:"-" }}</td>
+                    <td>{{ empleado.fecha_baja|date:"Y-m-d"|default:"-" }}</td>
+                    <td>{{ empleado.departamento|default:"-" }}</td>
+                    <td>{{ empleado.puesto|default:"-" }}</td>
+                    <td>{{ empleado.centro_costo|default:"-" }}</td>
+                    <td>{{ empleado.sucursal|default:"-" }}</td>
+                    <td>{{ empleado.plan|default:"-" }}</td>
+                    <td>{{ empleado.telefono_trabajo|default:"-" }}</td>
+                    <td>{{ empleado.telefono_celular|default:"-" }}</td>
+                    <td>{{ empleado.telefono_otro|default:"-" }}</td>
+                    <td>{{ empleado.email|default:"-" }}</td>
+                    <td>{{ empleado.horario_comedor|default:"-" }}</td>
+                    <td>{{ empleado.turno|default:"-" }}</td>
+                    <td>
+                        {% if empleado.foto %}
+                            <img src="{{ empleado.foto }}" alt="Foto de {{ empleado.nombre_completo }}" style="max-width: 100px; height: auto;">
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ empleado.jefe_inmediato|default:"-" }}</td>
+                    <td class="actions">
+                        <a href="{% url 'empleados:editar_empleado' empleado.id_empleado %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'empleados:eliminar_empleado' empleado.id_empleado %}" onclick="return confirm('¿Seguro que quieres eliminar este empleado?');"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="27">No hay empleados registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+        {% endif %}
+        <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+        {% endif %}
+    </div>
+</div>
+<style>
+    /* Ajustes para la tabla ancha */
+    table th, table td {
+        white-space: nowrap;
+        min-width: 100px; /* Asegura que las columnas tengan un ancho mínimo */
+    }
+    .table-container {
+        max-width: 100%;
+        overflow-x: auto; /* Permite desplazamiento horizontal */
+    }
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .pagination a, .pagination span {
+        margin: 0 10px;
+        text-decoration: none;
+        color: #1a2a47;
+    }
+    .pagination a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}

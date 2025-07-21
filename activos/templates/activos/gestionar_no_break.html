@@ -1,0 +1,130 @@
+{% extends 'empleados/base.html' %}
+{% block title %}{% if no_break %}Editar No Break {{ no_break.ID_BREAK }}{% else %}Crear Nuevo No Break{% endif %} - Zurich Pharma{% endblock %}
+{% block content %}
+<div class="table-container">
+    <h2>{% if no_break %}Editar No Break {{ no_break.ID_BREAK }}{% else %}Crear Nuevo No Break{% endif %}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-grid">
+            <div class="form-col">
+                <label for="ID_BREAK">ID No Break:</label>
+                <input type="text" name="ID_BREAK" id="id_break" value="{{ no_break.ID_BREAK|default:'EQB-' }}" {% if no_break %}readonly{% endif %} required>
+                
+                <label for="ESTADO">Estado:</label>
+                <select name="ESTADO" id="estado" required>
+                    <option value="" disabled {% if not no_break.ESTADO %}selected{% endif %}>Selecciona un estado</option>
+                    <option value="Activo" {% if no_break.ESTADO == 'Activo' %}selected{% endif %}>Activo</option>
+                    <option value="Inactivo" {% if no_break.ESTADO == 'Inactivo' %}selected{% endif %}>Inactivo</option>
+                </select>
+                
+                <label for="RAZON_SOCIAL">Razón Social:</label>
+                <input type="text" name="RAZON_SOCIAL" value="{{ no_break.RAZON_SOCIAL|default:'' }}" required>
+                
+                <label for="MARCA">Marca:</label>
+                <input type="text" name="MARCA" value="{{ no_break.MARCA|default:'' }}">
+                
+                <label for="MODELO">Modelo:</label>
+                <input type="text" name="MODELO" value="{{ no_break.MODELO|default:'' }}">
+            </div>
+            <div class="form-col">
+                <label for="NUM_SERIE">Número de Serie:</label>
+                <input type="text" name="NUM_SERIE" value="{{ no_break.NUM_SERIE|default:'' }}">
+                
+                <label for="OBSERVATIONS">Observaciones:</label>
+                <input type="text" name="OBSERVATIONS" value="{{ no_break.OBSERVATIONS|default:'' }}">
+                
+                <label for="FECHA_ALTA">Fecha Alta:</label>
+                <input type="datetime-local" name="FECHA_ALTA" id="fecha_alta">
+                
+                <label for="DOCUMENTOS">Documentos (PDF):</label>
+                <input type="file" name="DOCUMENTOS" accept=".pdf">
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button type="submit" class="submit-btn">Guardar</button>
+            <a href="{% url 'activos:ver_no_breaks' %}" class="cancel-btn">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set current date and time for FECHA_ALTA
+        const now = new Date();
+        const offset = now.getTimezoneOffset();
+        const adjustedDate = new Date(now.getTime() - (offset * 60 * 1000));
+        const formatted = adjustedDate.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM
+        document.getElementById('fecha_alta').value = formatted;
+
+        {% if not no_break %}
+        // Auto-fill ID_BREAK with EQB- prefix when creating
+        const idBreakInput = document.getElementById('id_break');
+        if (!idBreakInput.value || idBreakInput.value === 'EQB-') {
+            idBreakInput.value = 'EQB-';
+        }
+        idBreakInput.addEventListener('input', function() {
+            const value = this.value;
+            if (!value.startsWith('EQB-')) {
+                this.value = 'EQB-' + value.replace(/^EQB-/, '');
+            }
+        });
+        {% endif %}
+    });
+</script>
+
+<style>
+    .table-container { padding: 20px; max-width: 800px; margin: 0 auto; }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Two equal columns */
+        gap: 20px;
+    }
+
+    .form-col {
+        display: grid;
+        grid-template-columns: 150px 1fr; /* Label and input width */
+        gap: 10px;
+        align-items: center;
+    }
+
+    .form-col label {
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .form-col input, .form-col select {
+        padding: 8px;
+        border: 1px solid #1a2a47;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    .modal-actions {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .submit-btn, .cancel-btn {
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-right: 10px;
+    }
+
+    .submit-btn {
+        background: #1a2a47;
+        color: white;
+        border: none;
+    }
+
+    .cancel-btn {
+        background: #6b7280;
+        color: white;
+    }
+
+    .submit-btn:hover, .cancel-btn:hover {
+        opacity: 0.9;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends 'empleados/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="table-container">
+        {% if tipo == "EQUIPOS" %}
+            <button class="btn-add" onclick="window.location.href='{% url 'activos:gestionar_equipo' %}'">Agregar Equipo</button>
+            <form method="get" action="{% url 'activos:buscar_equipo' %}" style="display:inline;">
+                <input type="text" name="q" placeholder="Buscar por EQC-XXX" style="padding:8px; border:1px solid #1a2a47; border-radius:5px;">
+                <button type="submit" style="padding:8px 12px; background:#1a2a47; color:white; border:none; border-radius:5px;">Buscar</button>
+            </form>
+        {% elif tipo == "MONITORES" %}
+            <button class="btn-add" onclick="window.location.href='{% url 'activos:gestionar_monitor' %}'">Agregar Monitor</button>
+            <form method="get" action="{% url 'activos:buscar_monitor' %}" style="display:inline;">
+                <input type="text" name="q" placeholder="Buscar por EQM-XXX" style="padding:8px; border:1px solid #1a2a47; border-radius:5px;">
+                <button type="submit" style="padding:8px 12px; background:#1a2a47; color:white; border:none; border-radius:5px;">Buscar</button>
+            </form>
+        {% elif tipo == "NO_BREAKS" %}
+            <button class="btn-add" onclick="window.location.href='{% url 'activos:gestionar_no_break' %}'">Agregar No Break</button>
+            <form method="get" action="{% url 'activos:buscar_no_break' %}" style="display:inline;">
+                <input type="text" name="q" placeholder="Buscar por EQB-XXX" style="padding:8px; border:1px solid #1a2a47; border-radius:5px;">
+                <button type="submit" style="padding:8px 12px; background:#1a2a47; color:white; border:none; border-radius:5px;">Buscar</button>
+            </form>
+        {% endif %}
+        {% if page_obj %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Estado</th>
+                        <th>Razón Social</th>
+                        <th>Ubicación</th>
+                        {% if tipo == "EQUIPOS" %}
+                            <th>Tipo Equipo</th>
+                            <th>Situación</th>
+                            <th>Proveedor</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Serie</th>
+                            <th>Línea Tel</th>
+                            <th>IMEI</th>
+                            <th>Compañía</th>
+                            <th>Procesador</th>
+                            <th>RAM 1</th>
+                            <th>RAM 2</th>
+                            <th>Disco 1</th>
+                            <th>Disco 2</th>
+                            <th>Sistema Operativo</th>
+                            <th>Observaciones</th>
+                            <th>MAC WiFi 1</th>
+                            <th>MAC WiFi 2</th>
+                            <th>MAC Ethernet 1</th>
+                            <th>MAC Ethernet 2</th>
+                            <th>Departamento Asignado</th>
+                            <th>Fecha Alta</th>
+                            <th>Foto</th>
+                            <th>Documentos</th>
+                            <th>Antivirus</th>
+                        {% elif tipo == "MONITORES" %}
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Número de Serie</th>
+                            <th>Observaciones</th>
+                            <th>Documentos</th>
+                        {% elif tipo == "NO_BREAKS" %}
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Número de Serie</th>
+                            <th>Observaciones</th>
+                            <th>Documentos</th>
+                        {% endif %}
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for activo in activos %}
+                    <tr>
+                        <td>
+                            {% if tipo == "EQUIPOS" and activo.ID_EQUIPO %}
+                                <a href="{% url 'activos:ver_equipo' activo.ID_EQUIPO %}">{{ activo.ID_EQUIPO }}</a>
+                            {% elif tipo == "MONITORES" and activo.ID_MONITOR %}
+                                <a href="{% url 'activos:ver_monitor' activo.ID_MONITOR %}">{{ activo.ID_MONITOR }}</a>
+                            {% elif tipo == "NO_BREAKS" and activo.ID_BREAK %}
+                                <a href="{% url 'activos:ver_no_break' activo.ID_BREAK %}">{{ activo.ID_BREAK }}</a>
+                            {% else %}
+                                {{ activo.id|default:'N/A' }}
+                            {% endif %}
+                        </td>
+                        <td>{{ activo.ESTADO|default:'-' }}</td>
+                        <td>{{ activo.RAZON_SOCIAL|default:'-' }}</td>
+                        <td>{{ activo.UBICACION|default:'-' }}</td>
+                        {% if tipo == "EQUIPOS" %}
+                            <td>{{ activo.TIPO_EQUIPO|default:'-' }}</td>
+                            <td>{{ activo.SITUACION|default:'-' }}</td>
+                            <td>{{ activo.PROVEEDOR|default:'-' }}</td>
+                            <td>{{ activo.MARCA|default:'-' }}</td>
+                            <td>{{ activo.MODELO|default:'-' }}</td>
+                            <td>{{ activo.SERIE|default:'-' }}</td>
+                            <td>{{ activo.LINEA_TEL|default:'-' }}</td>
+                            <td>{{ activo.IMEI|default:'-' }}</td>
+                            <td>{{ activo.COMPANIA|default:'-' }}</td>
+                            <td>{{ activo.PROCESADOR|default:'-' }}</td>
+                            <td>{{ activo.RAM_1|default:'-' }}</td>
+                            <td>{{ activo.RAM_2|default:'-' }}</td>
+                            <td>{{ activo.DISCO_1|default:'-' }}</td>
+                            <td>{{ activo.DISCO_2|default:'-' }}</td>
+                            <td>{{ activo.SISTEMA_OPERATIVO|default:'-' }}</td>
+                            <td>{{ activo.OBSERVATIONS|default:'-' }}</td>
+                            <td>{{ activo.MAC_WIFI1|default:'-' }}</td>
+                            <td>{{ activo.MAC_WIFI2|default:'-' }}</td>
+                            <td>{{ activo.MAC_ETHERNET1|default:'-' }}</td>
+                            <td>{{ activo.MAC_ETHERNET2|default:'-' }}</td>
+                            <td>{{ activo.DEPARTAMENTO_ASIGNADO|default:'-' }}</td>
+                            <td>{{ activo.FECHA_ALTA|date:'Y-m-d'|default:'-' }}</td>
+                            <td>{% if activo.FOTO %}<a href="{{ activo.FOTO.url }}" target="_blank">Ver Foto</a>{% else %}-{% endif %}</td>
+                            <td>{% if activo.DOCUMENTOS %}<a href="{{ activo.DOCUMENTOS.url }}" target="_blank">Ver Documento</a>{% else %}-{% endif %}</td>
+                            <td>{{ activo.ANTIVIRUS|default:'-' }}</td>
+                        {% elif tipo == "MONITORES" %}
+                            <td>{{ activo.MARCA|default:'-' }}</td>
+                            <td>{{ activo.MODELO|default:'-' }}</td>
+                            <td>{{ activo.NUM_SERIE|default:'-' }}</td>
+                            <td>{{ activo.OBSERVATIONS|default:'-' }}</td>
+                            <td>{% if activo.DOCUMENTOS %}<a href="{{ activo.DOCUMENTOS.url }}" target="_blank">Ver Documento</a>{% else %}-{% endif %}</td>
+                        {% elif tipo == "NO_BREAKS" %}
+                            <td>{{ activo.MARCA|default:'-' }}</td>
+                            <td>{{ activo.MODELO|default:'-' }}</td>
+                            <td>{{ activo.NUM_SERIE|default:'-' }}</td>
+                            <td>{{ activo.OBSERVATIONS|default:'-' }}</td>
+                            <td>{% if activo.DOCUMENTOS %}<a href="{{ activo.DOCUMENTOS.url }}" target="_blank">Ver Documento</a>{% else %}-{% endif %}</td>
+                        {% endif %}
+                        <td>
+                            {% if tipo == "EQUIPOS" %}
+                                <a href="{% url 'activos:gestionar_equipo_edit' activo.ID_EQUIPO %}" title="Editar">
+                                    <i class="fas fa-edit" style="color:#1a2a47; cursor:pointer;"></i>
+                                </a>
+                                <a href="{% url 'activos:eliminar_equipo' activo.ID_EQUIPO %}" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar este equipo?');">
+                                    <i class="fas fa-trash-alt" style="color:#f44336; cursor:pointer; margin-left:10px;"></i>
+                                </a>
+                                <a href="{% url 'activos:ver_equipo' activo.ID_EQUIPO %}" title="Ver">
+                                    <i class="fas fa-eye" style="color:#1a2a47; cursor:pointer; margin-left:10px;"></i>
+                                </a>
+                            {% elif tipo == "MONITORES" %}
+                                <a href="{% url 'activos:gestionar_monitor_edit' activo.ID_MONITOR %}" title="Editar">
+                                    <i class="fas fa-edit" style="color:#1a2a47; cursor:pointer;"></i>
+                                </a>
+                                <a href="{% url 'activos:eliminar_monitor' activo.ID_MONITOR %}" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar este monitor?');">
+                                    <i class="fas fa-trash-alt" style="color:#f44336; cursor:pointer; margin-left:10px;"></i>
+                                </a>
+                                <a href="{% url 'activos:ver_monitor' activo.ID_MONITOR %}" title="Ver">
+                                    <i class="fas fa-eye" style="color:#1a2a47; cursor:pointer; margin-left:10px;"></i>
+                                </a>
+                            {% elif tipo == "NO_BREAKS" %}
+                                <a href="{% url 'activos:gestionar_no_break_edit' activo.ID_BREAK %}" title="Editar">
+                                    <i class="fas fa-edit" style="color:#1a2a47; cursor:pointer;"></i>
+                                </a>
+                                <a href="{% url 'activos:eliminar_no_break' activo.ID_BREAK %}" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar este No Break?');">
+                                    <i class="fas fa-trash-alt" style="color:#f44336; cursor:pointer; margin-left:10px;"></i>
+                                </a>
+                                <a href="{% url 'activos:ver_no_break' activo.ID_BREAK %}" title="Ver">
+                                    <i class="fas fa-eye" style="color:#1a2a47; cursor:pointer; margin-left:10px;"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="20">No hay registros disponibles.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'empleados/paginacion.html' %}
+        {% else %}
+            <p>No hay registros disponibles.</p>
+        {% endif %}
+    </div>
+{% endblock %}

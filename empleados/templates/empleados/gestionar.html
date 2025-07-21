@@ -1,0 +1,364 @@
+{% extends 'empleados/base.html' %}
+{% block title %}Gestionar Empleados - Zurich Pharma{% endblock %}
+{% block content %}
+<div class="table-container">
+    <h2>Gestionar Empleados</h2>
+    <button class="btn-add" onclick="document.getElementById('userModal').style.display='flex'">Crear Nuevo Empleado</button>
+    <form method="GET" action="{% url 'empleados:buscar_empleado' %}" style="margin-bottom:20px;">
+        <input type="text" name="q" placeholder="Buscar por ID o Número Oficial" style="padding:8px;border:1px solid #1a2a47;border-radius:5px;">
+        <button type="submit" class="btn-add">Buscar</button>
+    </form>
+    {% if empleado %}
+    <div class="empleado-detalle-wrapper">
+        <h3 class="empleado-titulo">Datos del Empleado</h3>
+        <form method="POST" action="{% url 'empleados:editar_empleado' empleado.id_empleado %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="empleado-form-main-grid">
+                <!-- Columna 1: Foto y básicos -->
+                <div class="empleado-foto-campos">
+                    <div class="foto-empleado-pos">
+                        {% if empleado.foto %}
+                        <img src="{{ empleado.foto.url }}" alt="Foto de {{ empleado.nombre_completo }}">
+                        {% else %}
+                        <div class="foto-placeholder">Sin Foto</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-col">
+                        <label>ID Empleado</label>
+                        <input type="number" name="id_empleado" value="{{ empleado.id_empleado }}" readonly>
+                        <label>Número Oficial</label>
+                        <input type="number" name="num_oficial" value="{{ empleado.num_oficial }}" required>
+                        <label>Número Provisional</label>
+                        <input type="number" name="num_provicional" value="{{ empleado.num_provicional }}" required>
+                        <label>Estado</label>
+                        <select name="estado" required>
+                            <option value="Activo" {% if empleado.estado == 'Activo' %}selected{% endif %}>Activo</option>
+                            <option value="Inactivo" {% if empleado.estado == 'Inactivo' %}selected{% endif %}>Inactivo</option>
+                        </select>
+                        <label>Sexo</label>
+                        <select name="sexo">
+                            <option value="Masculino" {% if empleado.sexo == 'Masculino' %}selected{% endif %}>Masculino</option>
+                            <option value="Femenino" {% if empleado.sexo == 'Femenino' %}selected{% endif %}>Femenino</option>
+                            <option value="" {% if not empleado.sexo %}selected{% endif %}>No especificado</option>
+                        </select>
+                        <label>Foto</label>
+                        <input type="file" name="foto" accept="image/*">
+                        <label>Horario Comedor</label>
+                        <select name="horario_comedor">
+                            <option value="" {% if not empleado.horario_comedor %}selected{% endif %}>Seleccionar horario</option>
+                            <option value="12:00-13:00" {% if empleado.horario_comedor == '12:00-13:00' %}selected{% endif %}>12:00-13:00</option>
+                            <option value="13:00-14:00" {% if empleado.horario_comedor == '13:00-14:00' %}selected{% endif %}>13:00-14:00</option>
+                            <option value="14:00-15:00" {% if empleado.horario_comedor == '14:00-15:00' %}selected{% endif %}>14:00-15:00</option>
+                            <option value="15:00-16:00" {% if empleado.horario_comedor == '15:00-16:00' %}selected{% endif %}>15:00-16:00</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Columna 2: Nombre y fechas -->
+                <div class="form-col">
+                    <label>Nombre</label>
+                    <input type="text" name="nombre" id="nombre_editar" value="{{ empleado.nombre|default_if_none:'' }}" oninput="updateNombreCompleto()">
+                    <label>Apellido Paterno</label>
+                    <input type="text" name="apellido_paterno" id="apellido_paterno_editar" value="{{ empleado.apellido_paterno|default_if_none:'' }}" oninput="updateNombreCompleto()">
+                    <label>Apellido Materno</label>
+                    <input type="text" name="apellido_materno" id="apellido_materno_editar" value="{{ empleado.apellido_materno|default_if_none:'' }}" oninput="updateNombreCompleto()">
+                    <label>Nombre Completo</label>
+                    <input type="text" name="nombre_completo" id="nombre_completo_editar" value="{{ empleado.nombre_completo|default_if_none:'' }}" readonly>
+                    <label>Fecha Alta</label>
+                    <input type="date" name="fecha_alta" value="{{ empleado.fecha_alta|date:'Y-m-d' }}" readonly>
+                    <label>Fecha Contratación</label>
+                    <input type="date" name="fecha_contratacion" value="{{ empleado.fecha_contratacion|date:'Y-m-d'|default_if_none:'' }}">
+                    <label>Fecha Baja</label>
+                    <input type="date" name="fecha_baja" value="{{ empleado.fecha_baja|date:'Y-m-d'|default_if_none:'' }}">
+                    <label>Usuario Última Modificación</label>
+                    <input type="text" name="usuario_ultima_modificacion" value="{{ empleado.usuario_ultima_modificacion|default:request.user.username }}" readonly>
+                    <label>Turno</label>
+                    <input type="text" name="turno" value="{{ empleado.turno|default_if_none:'' }}">
+                    <label>Jefe Inmediato</label>
+                    <input type="text" name="jefe_inmediato" value="{{ empleado.jefe_inmediato|default_if_none:'' }}">
+                </div>
+                <!-- Columna 3: Laborales y contacto -->
+                <div class="form-col">
+                    <label>Departamento</label>
+                    <input type="text" name="departamento" value="{{ empleado.departamento|default_if_none:'' }}">
+                    <label>Puesto</label>
+                    <input type="text" name="puesto" value="{{ empleado.puesto|default_if_none:'' }}">
+                    <label>Centro Costo</label>
+                    <input type="text" name="centro_costo" value="{{ empleado.centro_costo|default_if_none:'' }}">
+                    <label>Sucursal</label>
+                    <input type="text" name="sucursal" value="{{ empleado.sucursal|default_if_none:'' }}">
+                    <label>Plan</label>
+                    <input type="text" name="plan" value="{{ empleado.plan|default_if_none:'' }}">
+                    <label>Teléfono Trabajo</label>
+                    <input type="text" name="telefono_trabajo" value="{{ empleado.telefono_trabajo|default_if_none:'' }}">
+                    <label>Teléfono Celular</label>
+                    <input type="text" name="telefono_celular" value="{{ empleado.telefono_celular|default_if_none:'' }}">
+                    <label>Teléfono Otro</label>
+                    <input type="text" name="telefono_otro" value="{{ empleado.telefono_otro|default_if_none:'' }}">
+                    <label>Email</label>
+                    <input type="email" name="email" value="{{ empleado.email|default_if_none:'' }}">
+                    
+                    
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="submit" class="submit-btn">Guardar</button>
+                <a href="{% url 'empleados:eliminar_empleado' empleado.id_empleado %}" class="submit-btn" style="background:#dc3545;" onclick="return confirm('¿Seguro que quieres eliminar este empleado?');">Eliminar</a>
+                <a href="{% url 'empleados:navegar_empleado' 'anterior' empleado.id_empleado %}" class="submit-btn">Anterior</a>
+                <a href="{% url 'empleados:navegar_empleado' 'siguiente' empleado.id_empleado %}" class="submit-btn">Siguiente</a>
+                <a href="{% url 'empleados:navegar_empleado' 'ultimo' empleado.id_empleado %}" class="submit-btn">Último</a>
+            </div>
+        </form>
+        <style>
+        .empleado-detalle-wrapper {
+            background: #f8f9fb;
+            border-radius: 12px;
+            padding: 32px;
+            margin-top: 30px;
+            box-shadow: 0 4px 24px #1a2a4712;
+        }
+        .empleado-titulo {
+            margin-left: 0;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .empleado-form-main-grid {
+            display: grid;
+            grid-template-columns: 370px 1fr 1fr;
+            gap: 36px 32px;
+        }
+        .empleado-foto-campos {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .foto-empleado-pos {
+            width: 320px;
+            height: 320px;
+            background: #fff;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 22px;
+            box-shadow: 0 2px 16px #1a2a4712;
+        }
+        .foto-empleado-pos img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2.5px solid #e3e3e3;
+            background: #f0f0f0;
+        }
+        .foto-placeholder {
+            width: 300px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: #e0e0e0;
+            color: #888;
+            font-size: 22px;
+            font-weight: 600;
+            border: 2.5px solid #e3e3e3;
+        }
+        .form-col label {
+            display: block;
+            margin-bottom: 3px;
+            font-weight: 500;
+            color: #1a2a47;
+            font-size: 14px;
+        }
+        .form-col input,
+        .form-col select {
+            width: 100%;
+            margin-bottom: 13px;
+            padding: 7px 10px;
+            border: 1px solid #cfd8dc;
+            border-radius: 5px;
+            font-size: 14px;
+            background: #f5f7fa;
+            color: #24292f;
+            transition: border .2s;
+        }
+        .form-col input:focus, .form-col select:focus {
+            outline: none;
+            border: 1.5px solid #1a2a47;
+            background: #fff;
+        }
+        .modal-actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+        }
+        .submit-btn {
+            padding: 8px 22px;
+            border: none;
+            border-radius: 5px;
+            background: #1a2a47;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background .2s;
+        }
+        .submit-btn:hover {
+            background: #0e1830;
+        }
+        @media (max-width: 1200px) {
+            .empleado-form-main-grid {
+                grid-template-columns: 300px 1fr 1fr;
+            }
+            .foto-empleado-pos {
+                width: 220px; height: 220px;
+            }
+            .foto-empleado-pos img,
+            .foto-placeholder {
+                width: 200px; height: 200px;
+            }
+        }
+        @media (max-width: 900px) {
+            .empleado-form-main-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .empleado-foto-campos {
+                flex-direction: row;
+                gap: 16px;
+                align-items: flex-start;
+                justify-content: flex-start;
+            }
+            .foto-empleado-pos {
+                width: 140px; height: 140px; min-width: 140px;
+            }
+            .foto-empleado-pos img,
+            .foto-placeholder {
+                width: 120px; height: 120px;
+            }
+        }
+        @media (max-width: 700px) {
+            .empleado-detalle-wrapper {
+                padding: 15px;
+            }
+            .empleado-form-main-grid {
+                grid-template-columns: 1fr;
+            }
+            .empleado-foto-campos {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        </style>
+    </div>
+    {% endif %}
+</div>
+<div id="userModal" class="modal">
+    <div class="user-modal-content">
+        <span class="close" onclick="document.getElementById('userModal').style.display='none'">×</span>
+        <div class="user-modal-body">
+            <h2>Crear Nuevo Empleado</h2>
+            <form method="POST" action="{% url 'empleados:crear_empleado' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <!-- Columna izquierda -->
+                    <div class="form-col">
+                        <label>ID Empleado</label>
+                        <input type="number" name="id_empleado" required>
+                        <label>Número Oficial</label>
+                        <input type="number" name="num_oficial" required>
+                        <label>Número Provisional</label>
+                        <input type="number" name="num_provicional" required>
+                        <label>Nombre</label>
+                        <input type="text" name="nombre" id="nombre_crear" oninput="updateNombreCompletoCrear()">
+                        <label>Apellido Paterno</label>
+                        <input type="text" name="apellido_paterno" id="apellido_paterno_crear" oninput="updateNombreCompletoCrear()">
+                        <label>Apellido Materno</label>
+                        <input type="text" name="apellido_materno" id="apellido_materno_crear" oninput="updateNombreCompletoCrear()">
+                        <label>Nombre Completo</label>
+                        <input type="text" name="nombre_completo" id="nombre_completo_crear" readonly>
+                        <label>Sexo</label>
+                        <select name="sexo">
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="">No especificado</option>
+                        </select>
+                        <label>Estado</label>
+                        <select name="estado" required>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                        </select>
+                        <label>Fecha Alta</label>
+                        <input type="date" name="fecha_alta" value="{% now 'Y-m-d' %}" readonly>
+                        <label>Usuario Última Modificación</label>
+                        <input type="text" name="usuario_ultima_modificacion" value="{{ request.user.username|default:'admin' }}" readonly>
+                        <label>Fecha Contratación</label>
+                        <input type="date" name="fecha_contratacion">
+                        <label>Fecha Baja</label>
+                        <input type="date" name="fecha_baja">
+                    </div>
+                    <!-- Columna derecha -->
+                    <div class="form-col">
+                        <label>Departamento</label>
+                        <input type="text" name="departamento">
+                        <label>Puesto</label>
+                        <input type="text" name="puesto">
+                        <label>Centro Costo</label>
+                        <input type="text" name="centro_costo">
+                        <label>Sucursal</label>
+                        <input type="text" name="sucursal">
+                        <label>Plan</label>
+                        <input type="text" name="plan">
+                        <label>Teléfono Trabajo</label>
+                        <input type="text" name="telefono_trabajo">
+                        <label>Teléfono Celular</label>
+                        <input type="text" name="telefono_celular">
+                        <label>Teléfono Otro</label>
+                        <input type="text" name="telefono_otro">
+                        <label>Email</label>
+                        <input type="email" name="email">
+                        <label>Horario Comedor</label>
+                        <select name="horario_comedor">
+                            <option value="">Seleccionar horario</option>
+                            <option value="12:00-13:00">12:00-13:00</option>
+                            <option value="13:00-14:00">13:00-14:00</option>
+                            <option value="14:00-15:00">14:00-15:00</option>
+                            <option value="15:00-16:00">15:00-16:00</option>
+                        </select>
+                        <label>Turno</label>
+                        <input type="text" name="turno">
+                        <label>Foto</label>
+                        <input type="file" name="foto" accept="image/*">
+                        <label>Jefe Inmediato</label>
+                        <input type="text" name="jefe_inmediato">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="submit-btn">Crear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% if messages %}
+<div style="margin: 20px; padding: 10px; background: #dff0d8; color: #3c763d; border-radius: 5px;">
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
+<script>
+    function updateNombreCompleto() {
+        const nombre = document.getElementById('nombre_editar')?.value || '';
+        const apellido_paterno = document.getElementById('apellido_paterno_editar')?.value || '';
+        const apellido_materno = document.getElementById('apellido_materno_editar')?.value || '';
+        document.getElementById('nombre_completo_editar').value = `${nombre} ${apellido_paterno} ${apellido_materno}`.trim();
+    }
+    function updateNombreCompletoCrear() {
+        const nombre = document.getElementById('nombre_crear')?.value || '';
+        const apellido_paterno = document.getElementById('apellido_paterno_crear')?.value || '';
+        const apellido_materno = document.getElementById('apellido_materno_crear')?.value || '';
+        document.getElementById('nombre_completo_crear').value = `${nombre} ${apellido_paterno} ${apellido_materno}`.trim();
+    }
+</script>
+{% endblock %}

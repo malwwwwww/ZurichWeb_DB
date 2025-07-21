@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Zurich Pharma{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;}
+        body{margin:0;font-family:'Segoe UI',sans-serif;background:#f5f9ff;color:#333;}
+        .sidebar{width:250px;position:fixed;inset:0 auto 0 0;background:linear-gradient(to bottom,#1a2a47,#223b60);padding-top:20px;box-shadow:2px 0 5px rgba(0,0,0,.1);z-index:20;display:flex;flex-direction:column;}
+        .sidebar h2{color:#fff;text-align:center;margin-bottom:30px;}
+        .sidebar a{display:block;padding:15px 20px;color:#fff;font-size:15px;text-decoration:none;transition:.3s;}
+        .sidebar a:hover{background:#2c3e6a;}
+        .header{margin-left:250px;height:70px;padding:0 40px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:15;}
+        .main{margin-left:250px;padding:30px;}
+        .table-container{background:#fff;border:1px solid #dbeafe;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,.05);padding:20px;overflow-x:auto;}
+        table{width:100%;border-collapse:collapse;min-width:1000px;}
+        th,td{padding:12px 15px;border-bottom:1px solid #e2e8f0;text-align:left;white-space:nowrap;}
+        th{background:#f1f5f9;color:#1a2a47;}
+        .actions i{color:#1a2a47;margin-right:10px;cursor:pointer;}
+        .actions i:hover{color:#0f172a;}
+        .btn-add{background:#1a2a47;color:#fff;border:none;border-radius:6px;padding:10px 15px;font-size:14px;cursor:pointer;margin-bottom:20px;}
+        .btn-add:hover{background:#223b60;}
+        .modal{display:none;position:fixed;inset:0;background:rgba(26,42,71,.3);backdrop-filter:blur(5px);justify-content:center;align-items:center;padding:20px;z-index:100;overflow:auto;}
+        .user-modal-content{background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.3);border-radius:18px;box-shadow:0 12px 32px rgba(0,0,0,.2);width:100%;max-width:700px;max-height:calc(100vh - 80px);display:flex;flex-direction:column;position:relative;padding:32px 38px 28px;}
+        .close{position:absolute;top:18px;right:24px;font-size:24px;color:#1a2a47;cursor:pointer;}
+        .close:hover{color:#000;}
+        .user-modal-body{flex:1;display:flex;flex-direction:column;gap:20px;overflow-y:auto;padding-right:10px;padding-bottom:20px;}
+        .form-col{display:flex;flex-direction:column;gap:15px;}
+        .form-col label{font-weight:bold;color:#1a2a47;}
+        .form-col input,.form-col select,.form-col textarea{padding:10px;border:1px solid #dbeafe;border-radius:6px;font-size:14px;}
+        .modal-actions{text-align:right;margin-top:24px;}
+        .submit-btn{background:#1a2a47;color:#fff;border:none;border-radius:6px;padding:10px 24px;font-size:14px;cursor:pointer;}
+        .submit-btn:hover{background:#223b60;}
+        .sidebar-menu{position:relative;}
+        .submenu{display:none;position:absolute;left:100%;top:0;background:#2c3e6a;width:200px;border-radius:6px;box-shadow:2px 0 5px rgba(0,0,0,.2);z-index:10;}
+        .sidebar-menu:hover .submenu{display:block;}
+        .nav-btn, .submit-btn {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #0b2964ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .delete-btn {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <h2>Zurich</h2>
+        <a href="{% url 'empleados:index' %}"><i class="fas fa-home"></i> Inicio</a>
+        <div class="sidebar-menu">
+            <a href="#" class="menu-toggle"><i class="fas fa-users"></i> Empleados <i class="fas fa-chevron-down"></i></a>
+            <div class="submenu">
+                <a href="{% url 'empleados:ver_todos' %}"><i class="fas fa-list"></i> Ver Todos</a>
+                <a href="{% url 'empleados:gestionar' %}"><i class="fas fa-cog"></i> Gestionar</a>
+            </div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" class="menu-toggle"><i class="fas fa-desktop"></i> Activos <i class="fas fa-chevron-down"></i></a>
+            <div class="submenu">
+                <a href="{% url 'activos:ver_equipos' %}"><i class="fas fa-laptop"></i> Equipos</a>
+                <a href="{% url 'activos:ver_monitores' %}"><i class="fas fa-desktop"></i> Monitores</a>
+                <a href="{% url 'activos:ver_no_breaks' %}"><i class="fas fa-plug"></i> No Breaks</a>
+            </div>
+        </div>
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+        {% endif %}
+    </nav>
+    <header class="header">
+        <div style="display:flex;align-items:center;gap:10px;">
+            <i class="fas fa-search" style="color:#1a2a47;"></i>
+            <input type="text" placeholder="Buscar usuario…" style="padding:8px 12px;border:1px solid #1a2a47;border-radius:5px;outline:none;">
+        </div>
+        <div style="display:flex;align-items:center;gap:20px;">
+            <i class="fas fa-bell" style="font-size:18px;color:#1a2a47;cursor:pointer;"></i>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div style="background:#1a2a47;color:#fff;border-radius:50%;width:32px;height:32px;display:flex;justify-content:center;align-items:center;">
+                    <i class="fas fa-user"></i>
+                </div>
+                <span style="color:#1a2a47;font-weight:bold;">{{ user.username|default:'Administrador' }}</span>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        {% block content %}
+        {% endblock %}
+    </main>
+    <script>
+        // No JavaScript necesario para el comportamiento de hover, ya que se maneja con CSS
+    </script>
+</body>
+</html>

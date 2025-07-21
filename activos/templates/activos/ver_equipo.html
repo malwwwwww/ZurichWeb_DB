@@ -1,0 +1,56 @@
+{% extends 'empleados/base.html' %}
+{% block title %}Detalles del Equipo {{ equipo.ID_EQUIPO }} - Zurich Pharma{% endblock %}
+{% block content %}
+<div class="table-container">
+    <h2>Detalles del Equipo {{ equipo.ID_EQUIPO }}</h2>
+    <table>
+        <tr><th>ID Equipo</th><td>{{ equipo.ID_EQUIPO }}</td></tr>
+        <tr><th>Estado</th><td>{{ equipo.ESTADO|default:'-' }}</td></tr>
+        <tr><th>Razón Social</th><td>{{ equipo.RAZON_SOCIAL|default:'-' }}</td></tr>
+        <tr><th>Ubicación</th><td>{{ equipo.UBICACION|default:'-' }}</td></tr>
+        <tr><th>Tipo Equipo</th><td>{{ equipo.TIPO_EQUIPO|default:'-' }}</td></tr>
+        <tr><th>Situación</th><td>{{ equipo.SITUACION|default:'-' }}</td></tr>
+        <tr><th>Proveedor</th><td>{{ equipo.PROVEEDOR|default:'-' }}</td></tr>
+        <tr><th>Marca</th><td>{{ equipo.MARCA|default:'-' }}</td></tr>
+        <tr><th>Modelo</th><td>{{ equipo.MODELO|default:'-' }}</td></tr>
+        <tr><th>Serie</th><td>{{ equipo.SERIE|default:'-' }}</td></tr>
+        <tr><th>Línea Tel</th><td>{{ equipo.LINEA_TEL|default:'-' }}</td></tr>
+        <tr><th>IMEI</th><td>{{ equipo.IMEI|default:'-' }}</td></tr>
+        <tr><th>Compañía</th><td>{{ equipo.COMPANIA|default:'-' }}</td></tr>
+        <tr><th>Procesador</th><td>{{ equipo.PROCESADOR|default:'-' }}</td></tr>
+        <tr><th>RAM 1</th><td>{{ equipo.RAM_1|default:'-' }}</td></tr>
+        <tr><th>RAM 2</th><td>{{ equipo.RAM_2|default:'-' }}</td></tr>
+        <tr><th>Disco 1</th><td>{{ equipo.DISCO_1|default:'-' }}</td></tr>
+        <tr><th>Disco 2</th><td>{{ equipo.DISCO_2|default:'-' }}</td></tr>
+        <tr><th>Sistema Operativo</th><td>{{ equipo.SISTEMA_OPERATIVO|default:'-' }}</td></tr>
+        <tr><th>Observaciones</th><td>{{ equipo.OBSERVATIONS|default:'-' }}</td></tr>
+        <tr><th>MAC WiFi 1</th><td>{{ equipo.MAC_WIFI1|default:'-' }}</td></tr>
+        <tr><th>MAC WiFi 2</th><td>{{ equipo.MAC_WIFI2|default:'-' }}</td></tr>
+        <tr><th>MAC Ethernet 1</th><td>{{ equipo.MAC_ETHERNET1|default:'-' }}</td></tr>
+        <tr><th>MAC Ethernet 2</th><td>{{ equipo.MAC_ETHERNET2|default:'-' }}</td></tr>
+        <tr><th>Departamento Asignado</th><td>{{ equipo.DEPARTAMENTO_ASIGNADO|default:'-' }}</td></tr>
+        <tr><th>Fecha Alta</th><td>{{ equipo.FECHA_ALTA|date:'Y-m-d'|default:'-' }}</td></tr>
+        <tr><th>Foto</th><td>{% if equipo.FOTO %}<a href="{{ equipo.FOTO.url }}" target="_blank">Ver Foto</a>{% else %}-{% endif %}</td></tr>
+        <tr><th>Documentos</th><td>{% if equipo.DOCUMENTOS %}<a href="{{ equipo.DOCUMENTOS.url }}" target="_blank">Ver Documento</a>{% else %}-{% endif %}</td></tr>
+        <tr><th>Antivirus</th><td>{{ equipo.ANTIVIRUS|default:'-' }}</td></tr>
+    </table>
+    {% if id_list and id_list|length > 1 %}
+    <div class="navigation-buttons">
+        <button onclick="window.location.href='{% url 'activos:ver_equipo' id_list.0 %}'" class="nav-btn">Primero</button>
+        <button onclick="window.location.href='{% url 'activos:ver_equipo' prev_id %}'" class="nav-btn" {% if not prev_id %}disabled{% endif %}>Atrás</button>
+        <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        <button onclick="window.location.href='{% url 'activos:ver_equipo' next_id %}'" class="nav-btn" {% if not next_id %}disabled{% endif %}>Siguiente</button>
+        <button onclick="window.location.href='{% url 'activos:ver_equipo' id_list|last %}'" class="nav-btn">Último</button>
+    </div>
+    {% endif %}
+    <div class="modal-actions">
+        <a href="{% url 'activos:gestionar_equipo_edit' equipo.ID_EQUIPO %}" class="nav-btn">Editar</a>
+        <a href="{% url 'activos:eliminar_equipo' equipo.ID_EQUIPO %}" class="delete-btn" onclick="return confirm('¿Estás seguro de eliminar este equipo?');">Eliminar</a>
+    </div>
+    <form method="POST" style="display:none;">
+        {% csrf_token %}
+        <input type="text" name="q" id="search-input">
+        <button type="submit" id="search-button">Buscar</button>
+    </form>
+</div>
+{% endblock %}
