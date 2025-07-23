@@ -125,8 +125,11 @@
                 <input type="text" name="DEPARTAMENTO_ASIGNADO" value="{{ equipo.DEPARTAMENTO_ASIGNADO|default:'' }}">
                 
                 <label for="FECHA_ALTA">Fecha Alta:</label>
-                <input type="datetime-local" name="FECHA_ALTA" id="fecha_alta">
-                
+                <input type="datetime-local" name="FECHA_ALTA" id="fecha_alta"
+                    {% if equipo.FECHA_ALTA %}
+                        value="{{ equipo.FECHA_ALTA|date:'Y-m-d\\TH:i' }}"
+                    {% endif %}>
+ 
                 <label for="FOTO">Foto:</label>
                 <input type="file" name="FOTO" accept="image/*">
                 
@@ -144,65 +147,65 @@
     </form>
 </div>
 
+{% if not equipo %}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const now = new Date();
-        const offset = now.getTimezoneOffset();
-        const adjustedDate = new Date(now.getTime() - (offset * 60 * 1000));
-        const formatted = adjustedDate.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM
-        document.getElementById('fecha_alta').value = formatted;
+document.addEventListener('DOMContentLoaded', function () {
+    const now = new Date();
+    const offset = now.getTimezoneOffset();
+    const adjustedDate = new Date(now.getTime() - (offset * 60 * 1000));
+    const formatted = adjustedDate.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM
+    document.getElementById('fecha_alta').value = formatted;
 
-        {% if not equipo %}
-        const tipoEquipoToNomenclatura = {
-            "Computadora": "EQC-",
-            "Laptop": "EQC-",
-            "CPU": "EQC-",
-            "All in One": "EQC-",
-            "iMac": "EQC-",
-            "Tablet": "EEP-",
-            "iPad": "EEP-",
-            "Proyector": "EQP-",
-            "Impresora": "EQI-",
-            "Multifuncional": "EQI-",
-            "Servidor": "EDP-",
-            "Switch A": "EQS-",
-            "Switch N/A": "EQS-",
-            "Firewall": "ECF-",
-            "Pantalla": "ETV-",
-            "Monitor": "EQM-",
-            "Access Point": "EQW-",
-            "No break": "EQB-",
-            "Teléfono": "EQT-",
-            "Cámara de vigilancia": "EQV-",
-            "Cámara fotográfica": "EQF-",
-            "Enlace dedicado": "EED-",
-            "Celular": "ETM-",
-            "Checador": "ECH-",
-            "Escaner": "EQE-",
-            "Plotter": "EPL-",
-            "NAS": "NAS-",
-            "DVR": "DVR-",
-            "NVR": "NVR-",
-            "Módem": "DCS-",
-            "Conmutador": "DER-",
-            "FAX": "FAX-",
-            "Etiquetadora": "EQI-",
-            "Radio": "EQR-",
-            "Alarmas": "ALA-"
-        };
+    const tipoEquipoToNomenclatura = {
+        "Computadora": "EQC-",
+        "Laptop": "EQC-",
+        "CPU": "EQC-",
+        "All in One": "EQC-",
+        "iMac": "EQC-",
+        "Tablet": "EEP-",
+        "iPad": "EEP-",
+        "Proyector": "EQP-",
+        "Impresora": "EQI-",
+        "Multifuncional": "EQI-",
+        "Servidor": "EDP-",
+        "Switch A": "EQS-",
+        "Switch N/A": "EQS-",
+        "Firewall": "ECF-",
+        "Pantalla": "ETV-",
+        "Monitor": "EQM-",
+        "Access Point": "EQW-",
+        "No break": "EQB-",
+        "Teléfono": "EQT-",
+        "Cámara de vigilancia": "EQV-",
+        "Cámara fotográfica": "EQF-",
+        "Enlace dedicado": "EED-",
+        "Celular": "ETM-",
+        "Checador": "ECH-",
+        "Escaner": "EQE-",
+        "Plotter": "EPL-",
+        "NAS": "NAS-",
+        "DVR": "DVR-",
+        "NVR": "NVR-",
+        "Módem": "DCS-",
+        "Conmutador": "DER-",
+        "FAX": "FAX-",
+        "Etiquetadora": "EQI-",
+        "Radio": "EQR-",
+        "Alarmas": "ALA-"
+    };
 
-        document.getElementById('tipo_equipo').addEventListener('change', function() {
-            const tipo = this.value;
-            const idEquipoInput = document.getElementById('id_equipo');
-            const nomenclatura = tipoEquipoToNomenclatura[tipo] || '';
-            // Preserve the numeric part if it exists, else start with just the prefix
-            const currentId = idEquipoInput.value;
-            const numericPart = currentId.match(/\d+$/) ? currentId.match(/\d+$/)[0] : '';
-            idEquipoInput.value = nomenclatura + numericPart;
-        });
-        {% endif %}
+    document.getElementById('tipo_equipo').addEventListener('change', function() {
+        const tipo = this.value;
+        const idEquipoInput = document.getElementById('id_equipo');
+        const nomenclatura = tipoEquipoToNomenclatura[tipo] || '';
+        const currentId = idEquipoInput.value;
+        const numericPart = currentId.match(/\d+$/) ? currentId.match(/\d+$/)[0] : '';
+        idEquipoInput.value = nomenclatura + numericPart;
     });
+});
 </script>
+{% endif %}
+
 
 <style>
     .table-container {
