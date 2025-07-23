@@ -73,58 +73,91 @@
 </script>
 
 <style>
-    .table-container { padding: 20px; max-width: 800px; margin: 0 auto; }
+    .table-container {
+        padding: 30px;
+        max-width: 800px;
+        margin: 40px auto;
+        background-color: #f4f7fb; /* blanco azulado */
+        border-radius: 18px;
+        box-shadow: 0 4px 16px rgba(10, 31, 68, 0.12);
+        font-family: 'Segoe UI', sans-serif;
+    }
 
     .form-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr; /* Two equal columns */
-        gap: 20px;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
     }
 
     .form-col {
         display: grid;
-        grid-template-columns: 150px 1fr; /* Label and input width */
-        gap: 10px;
+        grid-template-columns: 150px 1fr;
+        gap: 12px;
         align-items: center;
     }
 
     .form-col label {
-        font-weight: bold;
+        font-weight: 600;
+        color: #0a1f44; /* azul marino */
         white-space: nowrap;
+        font-size: 15px;
     }
 
-    .form-col input, .form-col select {
-        padding: 8px;
+    .form-col input,
+    .form-col select {
+        padding: 10px 14px;
         border: 1px solid #1a2a47;
-        border-radius: 5px;
+        border-radius: 12px;
         width: 100%;
+        background-color: #ffffff;
+        color: #0a1f44;
+        font-size: 14px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .form-col input:focus,
+    .form-col select:focus {
+        outline: none;
+        border-color: #1e40af;
+        box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2);
     }
 
     .modal-actions {
-        margin-top: 20px;
+        margin-top: 30px;
         text-align: center;
     }
 
-    .submit-btn, .cancel-btn {
-        padding: 10px 20px;
-        border-radius: 5px;
+    .submit-btn,
+    .cancel-btn {
+        padding: 12px 26px;
+        border-radius: 25px;
         text-decoration: none;
-        margin-right: 10px;
+        font-weight: 600;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.3s ease;
     }
 
     .submit-btn {
-        background: #1a2a47;
+        background: linear-gradient(to right, #1a2a47, #284b87);
         color: white;
-        border: none;
     }
 
     .cancel-btn {
-        background: #6b7280;
+        background: #8a99ac;
         color: white;
     }
 
-    .submit-btn:hover, .cancel-btn:hover {
-        opacity: 0.9;
+    .submit-btn:hover {
+        background: linear-gradient(to right, #284b87, #1a2a47);
+        transform: scale(1.04);
     }
+
+    .cancel-btn:hover {
+        background: #748498;
+        transform: scale(1.04);
+    }
+
 </style>
 {% endblock %}

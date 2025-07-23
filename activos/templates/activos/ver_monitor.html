@@ -1,18 +1,45 @@
 {% extends 'empleados/base.html' %}
 {% block title %}Detalles del Monitor {{ monitor.ID_MONITOR }} - Zurich Pharma{% endblock %}
 {% block content %}
-<div class="table-container">
+<div class="form-vertical">
     <h2>Detalles del Monitor {{ monitor.ID_MONITOR }}</h2>
-    <table>
-        <tr><th>ID Monitor</th><td>{{ monitor.ID_MONITOR }}</td></tr>
-        <tr><th>Estado</th><td>{{ monitor.ESTADO|default:'-' }}</td></tr>
-        <tr><th>Razón Social</th><td>{{ monitor.RAZON_SOCIAL|default:'-' }}</td></tr>
-        <tr><th>Marca</th><td>{{ monitor.MARCA|default:'-' }}</td></tr>
-        <tr><th>Modelo</th><td>{{ monitor.MODELO|default:'-' }}</td></tr>
-        <tr><th>Número de Serie</th><td>{{ monitor.NUM_SERIE|default:'-' }}</td></tr>
-        <tr><th>Observaciones</th><td>{{ monitor.OBSERVATIONS|default:'-' }}</td></tr>
-        <tr><th>Documentos</th><td>{% if monitor.DOCUMENTOS %}<a href="{{ monitor.DOCUMENTOS.url }}" target="_blank">Ver Documento</a>{% else %}-{% endif %}</td></tr>
-    </table>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>ID Monitor</label>
+            <p>{{ monitor.ID_MONITOR }}</p>
+        </div>
+        <div class="form-group">
+            <label>Estado</label>
+            <p>{{ monitor.ESTADO|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Razón Social</label>
+            <p>{{ monitor.RAZON_SOCIAL|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Marca</label>
+            <p>{{ monitor.MARCA|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Modelo</label>
+            <p>{{ monitor.MODELO|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Número de Serie</label>
+            <p>{{ monitor.NUM_SERIE|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Observaciones</label>
+            <p>{{ monitor.OBSERVATIONS|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Documentos</label>
+            <p>{% if monitor.DOCUMENTOS %}
+                <a href="{{ monitor.DOCUMENTOS.url }}" target="_blank">Ver Documento</a>
+            {% else %}-{% endif %}</p>
+        </div>
+    </div>
+
     {% if id_list and id_list|length > 1 %}
     <div class="navigation-buttons">
         <button onclick="window.location.href='{% url 'activos:ver_monitor' id_list.0 %}'" class="nav-btn">Primero</button>
@@ -22,14 +49,84 @@
         <button onclick="window.location.href='{% url 'activos:ver_monitor' id_list|last %}'" class="nav-btn">Último</button>
     </div>
     {% endif %}
+
     <div class="modal-actions">
         <a href="{% url 'activos:gestionar_monitor_edit' monitor.ID_MONITOR %}" class="nav-btn">Editar</a>
         <a href="{% url 'activos:eliminar_monitor' monitor.ID_MONITOR %}" class="delete-btn" onclick="return confirm('¿Estás seguro de eliminar este monitor?');">Eliminar</a>
     </div>
+
     <form method="POST" style="display:none;">
         {% csrf_token %}
         <input type="text" name="q" id="search-input">
         <button type="submit" id="search-button">Buscar</button>
     </form>
 </div>
+
+<style>
+    .form-vertical {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        color: #001f3f;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .form-vertical h2 {
+        color: #001f3f;
+        border-bottom: 2px solid #001f3f;
+        padding-bottom: 10px;
+        margin-bottom: 25px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        font-size: 0.95rem;
+        color: #001f3f;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-group p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: #333333;
+        background-color: #f7f9fc;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .navigation-buttons,
+    .modal-actions {
+        margin-top: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .nav-btn, .delete-btn {
+        background-color: #001f3f;
+        color: #ffffff;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .delete-btn {
+        background-color: #b30000;
+    }
+
+    .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+</style>
 {% endblock %}

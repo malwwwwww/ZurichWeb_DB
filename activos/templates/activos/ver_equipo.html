@@ -1,39 +1,127 @@
 {% extends 'empleados/base.html' %}
 {% block title %}Detalles del Equipo {{ equipo.ID_EQUIPO }} - Zurich Pharma{% endblock %}
 {% block content %}
-<div class="table-container">
+<div class="form-vertical">
     <h2>Detalles del Equipo {{ equipo.ID_EQUIPO }}</h2>
-    <table>
-        <tr><th>ID Equipo</th><td>{{ equipo.ID_EQUIPO }}</td></tr>
-        <tr><th>Estado</th><td>{{ equipo.ESTADO|default:'-' }}</td></tr>
-        <tr><th>Razón Social</th><td>{{ equipo.RAZON_SOCIAL|default:'-' }}</td></tr>
-        <tr><th>Ubicación</th><td>{{ equipo.UBICACION|default:'-' }}</td></tr>
-        <tr><th>Tipo Equipo</th><td>{{ equipo.TIPO_EQUIPO|default:'-' }}</td></tr>
-        <tr><th>Situación</th><td>{{ equipo.SITUACION|default:'-' }}</td></tr>
-        <tr><th>Proveedor</th><td>{{ equipo.PROVEEDOR|default:'-' }}</td></tr>
-        <tr><th>Marca</th><td>{{ equipo.MARCA|default:'-' }}</td></tr>
-        <tr><th>Modelo</th><td>{{ equipo.MODELO|default:'-' }}</td></tr>
-        <tr><th>Serie</th><td>{{ equipo.SERIE|default:'-' }}</td></tr>
-        <tr><th>Línea Tel</th><td>{{ equipo.LINEA_TEL|default:'-' }}</td></tr>
-        <tr><th>IMEI</th><td>{{ equipo.IMEI|default:'-' }}</td></tr>
-        <tr><th>Compañía</th><td>{{ equipo.COMPANIA|default:'-' }}</td></tr>
-        <tr><th>Procesador</th><td>{{ equipo.PROCESADOR|default:'-' }}</td></tr>
-        <tr><th>RAM 1</th><td>{{ equipo.RAM_1|default:'-' }}</td></tr>
-        <tr><th>RAM 2</th><td>{{ equipo.RAM_2|default:'-' }}</td></tr>
-        <tr><th>Disco 1</th><td>{{ equipo.DISCO_1|default:'-' }}</td></tr>
-        <tr><th>Disco 2</th><td>{{ equipo.DISCO_2|default:'-' }}</td></tr>
-        <tr><th>Sistema Operativo</th><td>{{ equipo.SISTEMA_OPERATIVO|default:'-' }}</td></tr>
-        <tr><th>Observaciones</th><td>{{ equipo.OBSERVATIONS|default:'-' }}</td></tr>
-        <tr><th>MAC WiFi 1</th><td>{{ equipo.MAC_WIFI1|default:'-' }}</td></tr>
-        <tr><th>MAC WiFi 2</th><td>{{ equipo.MAC_WIFI2|default:'-' }}</td></tr>
-        <tr><th>MAC Ethernet 1</th><td>{{ equipo.MAC_ETHERNET1|default:'-' }}</td></tr>
-        <tr><th>MAC Ethernet 2</th><td>{{ equipo.MAC_ETHERNET2|default:'-' }}</td></tr>
-        <tr><th>Departamento Asignado</th><td>{{ equipo.DEPARTAMENTO_ASIGNADO|default:'-' }}</td></tr>
-        <tr><th>Fecha Alta</th><td>{{ equipo.FECHA_ALTA|date:'Y-m-d'|default:'-' }}</td></tr>
-        <tr><th>Foto</th><td>{% if equipo.FOTO %}<a href="{{ equipo.FOTO.url }}" target="_blank">Ver Foto</a>{% else %}-{% endif %}</td></tr>
-        <tr><th>Documentos</th><td>{% if equipo.DOCUMENTOS %}<a href="{{ equipo.DOCUMENTOS.url }}" target="_blank">Ver Documento</a>{% else %}-{% endif %}</td></tr>
-        <tr><th>Antivirus</th><td>{{ equipo.ANTIVIRUS|default:'-' }}</td></tr>
-    </table>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>ID Equipo</label>
+            <p>{{ equipo.ID_EQUIPO }}</p>
+        </div>
+        <div class="form-group">
+            <label>Estado</label>
+            <p>{{ equipo.ESTADO|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Razón Social</label>
+            <p>{{ equipo.RAZON_SOCIAL|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Ubicación</label>
+            <p>{{ equipo.UBICACION|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Tipo Equipo</label>
+            <p>{{ equipo.TIPO_EQUIPO|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Situación</label>
+            <p>{{ equipo.SITUACION|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Proveedor</label>
+            <p>{{ equipo.PROVEEDOR|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Marca</label>
+            <p>{{ equipo.MARCA|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Modelo</label>
+            <p>{{ equipo.MODELO|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Serie</label>
+            <p>{{ equipo.SERIE|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Línea Tel</label>
+            <p>{{ equipo.LINEA_TEL|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>IMEI</label>
+            <p>{{ equipo.IMEI|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Compañía</label>
+            <p>{{ equipo.COMPANIA|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Procesador</label>
+            <p>{{ equipo.PROCESADOR|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>RAM 1</label>
+            <p>{{ equipo.RAM_1|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>RAM 2</label>
+            <p>{{ equipo.RAM_2|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Disco 1</label>
+            <p>{{ equipo.DISCO_1|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Disco 2</label>
+            <p>{{ equipo.DISCO_2|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Sistema Operativo</label>
+            <p>{{ equipo.SISTEMA_OPERATIVO|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Observaciones</label>
+            <p>{{ equipo.OBSERVATIONS|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>MAC WiFi 1</label>
+            <p>{{ equipo.MAC_WIFI1|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>MAC WiFi 2</label>
+            <p>{{ equipo.MAC_WIFI2|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>MAC Ethernet 1</label>
+            <p>{{ equipo.MAC_ETHERNET1|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>MAC Ethernet 2</label>
+            <p>{{ equipo.MAC_ETHERNET2|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Departamento Asignado</label>
+            <p>{{ equipo.DEPARTAMENTO_ASIGNADO|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Fecha Alta</label>
+            <p>{{ equipo.FECHA_ALTA|date:"Y-m-d"|default:"-" }}</p>
+        </div>
+        <div class="form-group">
+            <label>Foto</label>
+            <p>{% if equipo.FOTO %}<a href="{{ equipo.FOTO.url }}" target="_blank">Ver Foto</a>{% else %}-{% endif %}</p>
+        </div>
+        <div class="form-group">
+            <label>Documentos</label>
+            <p>{% if equipo.DOCUMENTOS %}<a href="{{ equipo.DOCUMENTOS.url }}" target="_blank">Ver Documento</a>{% else %}-{% endif %}</p>
+        </div>
+        <div class="form-group">
+            <label>Antivirus</label>
+            <p>{{ equipo.ANTIVIRUS|default:"-" }}</p>
+        </div>
+    </div>
+
     {% if id_list and id_list|length > 1 %}
     <div class="navigation-buttons">
         <button onclick="window.location.href='{% url 'activos:ver_equipo' id_list.0 %}'" class="nav-btn">Primero</button>
@@ -43,14 +131,84 @@
         <button onclick="window.location.href='{% url 'activos:ver_equipo' id_list|last %}'" class="nav-btn">Último</button>
     </div>
     {% endif %}
+
     <div class="modal-actions">
         <a href="{% url 'activos:gestionar_equipo_edit' equipo.ID_EQUIPO %}" class="nav-btn">Editar</a>
         <a href="{% url 'activos:eliminar_equipo' equipo.ID_EQUIPO %}" class="delete-btn" onclick="return confirm('¿Estás seguro de eliminar este equipo?');">Eliminar</a>
     </div>
+
     <form method="POST" style="display:none;">
         {% csrf_token %}
         <input type="text" name="q" id="search-input">
         <button type="submit" id="search-button">Buscar</button>
     </form>
 </div>
+
+<style>
+    .form-vertical {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        color: #001f3f;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .form-vertical h2 {
+        color: #001f3f;
+        border-bottom: 2px solid #001f3f;
+        padding-bottom: 10px;
+        margin-bottom: 25px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        font-size: 0.95rem;
+        color: #001f3f;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-group p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: #333333;
+        background-color: #f7f9fc;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .navigation-buttons,
+    .modal-actions {
+        margin-top: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .nav-btn, .delete-btn {
+        background-color: #001f3f;
+        color: #ffffff;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .delete-btn {
+        background-color: #b30000;
+    }
+
+    .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+</style>
 {% endblock %}
