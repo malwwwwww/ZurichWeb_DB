@@ -79,11 +79,13 @@ WSGI_APPLICATION = 'zurich_pharma.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+
+#===============AUTENTICACION POR INICIO DE SESION DE WINDOWS======================
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
         'NAME': 'zurich_db',
-        'HOST': 'DESKTOP-T9OIK0J',
+        'HOST': 'DESKTOP-T9OIK0J',  # <<< CAMBIAR SEGUN EL NOMBRE DEL HOST========
         'PORT': '',
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',

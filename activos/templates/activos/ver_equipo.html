@@ -3,7 +3,20 @@
 {% block content %}
 <div class="form-vertical">
     <h2>Detalles del Equipo {{ equipo.ID_EQUIPO }}</h2>
+    
     <div class="form-grid">
+        <!-- Foto del equipo en la primera posición -->
+        <div class="form-group photo-container">
+            {% if equipo.FOTO %}
+            <label>Foto del Equipo</label>
+            <div class="photo-wrapper">
+                <img src="{{ equipo.FOTO.url }}" alt="Foto del equipo" class="equipo-photo">
+                <a href="{{ equipo.FOTO.url }}" target="_blank" class="view-full-link">Ver tamaño completo</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Resto de campos -->
         <div class="form-group">
             <label>ID Equipo</label>
             <p>{{ equipo.ID_EQUIPO }}</p>
@@ -109,10 +122,6 @@
             <p>{{ equipo.FECHA_ALTA|date:"Y-m-d"|default:"-" }}</p>
         </div>
         <div class="form-group">
-            <label>Foto</label>
-            <p>{% if equipo.FOTO %}<a href="{{ equipo.FOTO.url }}" target="_blank">Ver Foto</a>{% else %}-{% endif %}</p>
-        </div>
-        <div class="form-group">
             <label>Documentos</label>
             <p>{% if equipo.DOCUMENTOS %}<a href="{{ equipo.DOCUMENTOS.url }}" target="_blank">Ver Documento</a>{% else %}-{% endif %}</p>
         </div>
@@ -136,12 +145,6 @@
         <a href="{% url 'activos:gestionar_equipo_edit' equipo.ID_EQUIPO %}" class="nav-btn">Editar</a>
         <a href="{% url 'activos:eliminar_equipo' equipo.ID_EQUIPO %}" class="delete-btn" onclick="return confirm('¿Estás seguro de eliminar este equipo?');">Eliminar</a>
     </div>
-
-    <form method="POST" style="display:none;">
-        {% csrf_token %}
-        <input type="text" name="q" id="search-input">
-        <button type="submit" id="search-button">Buscar</button>
-    </form>
 </div>
 
 <style>
@@ -184,12 +187,42 @@
         border: 1px solid #ccc;
     }
 
+    .photo-container {
+        grid-column: span 1;
+    }
+
+    .photo-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .equipo-photo {
+        width: 250px;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+    }
+
+    .view-full-link {
+        font-size: 0.85rem;
+        color: #0066cc;
+        text-decoration: none;
+    }
+
+    .view-full-link:hover {
+        text-decoration: underline;
+    }
+
     .navigation-buttons,
     .modal-actions {
         margin-top: 30px;
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
+        justify-content: center;
     }
 
     .nav-btn, .delete-btn {
@@ -200,6 +233,7 @@
         text-decoration: none;
         border: none;
         cursor: pointer;
+        font-size: 0.95rem;
     }
 
     .delete-btn {

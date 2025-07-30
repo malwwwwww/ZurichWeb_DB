@@ -63,6 +63,10 @@
             <div class="submenu">
                 <a href="{% url 'empleados:ver_todos' %}"><i class="fas fa-list"></i> Ver Todos</a>
                 <a href="{% url 'empleados:gestionar' %}"><i class="fas fa-cog"></i> Gestionar</a>
+                <a href="{% url 'empleados:ver_todos' %}?section=departamentos"><i class="fas fa-building"></i> Departamentos</a>
+                <a href="{% url 'empleados:ver_todos' %}?section=puestos"><i class="fas fa-briefcase"></i> Puestos</a>
+                <a href="{% url 'empleados:ver_todos' %}?section=sucursal"><i class="fas fa-map-marker-alt"></i> Sucursal</a>
+                <a href="{% url 'empleados:ver_todos' %}?section=tarjetas"><i class="fas fa-id-card"></i> Tarjetas</a>
             </div>
         </div>
         <div class="sidebar-menu">
@@ -73,6 +77,46 @@
                 <a href="{% url 'activos:ver_no_breaks' %}"><i class="fas fa-plug"></i> No Breaks</a>
             </div>
         </div>
+        <div class="sidebar-menu">
+            <a href="#" class="menu-toggle"><i class="fas fa-users-cog"></i> Cuentas <i class="fas fa-chevron-down"></i></a>
+            <div class="submenu">
+                <a href="{% url 'activos:ver_equipos' %}?section=active_pharma"><i class="fas fa-user"></i> Active Pharma</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=active_bio"><i class="fas fa-user"></i> Active Bio</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=sae_pharma"><i class="fas fa-user"></i> SAE Pharma</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=sae_bio"><i class="fas fa-user"></i> SAE Bio</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=correos_pharma"><i class="fas fa-envelope"></i> Correos Pharma</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=correos_bio"><i class="fas fa-envelope"></i> Correos Bio</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=correos_ext"><i class="fas fa-envelope"></i> Correos Ext</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=impresoras_id"><i class="fas fa-print"></i> Impresoras ID</a>
+            </div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" class="menu-toggle"><i class="fas fa-box"></i> Consumibles <i class="fas fa-chevron-down"></i></a>
+            <div class="submenu">
+                <a href="{% url 'activos:ver_equipos' %}?section=listado_consumibles"><i class="fas fa-list"></i> Listado de Consumibles</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=movimiento_consumibles"><i class="fas fa-exchange-alt"></i> Movimiento de Consumibles</a>
+            </div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" class="menu-toggle"><i class="fas fa-file"></i> Formatos <i class="fas fa-chevron-down"></i></a>
+            <div class="submenu">
+                <a href="{% url 'activos:ver_equipos' %}?section=mantenimiento"><i class="fas fa-tools"></i> Mantenimiento</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=devolucion"><i class="fas fa-undo"></i> Devolución</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=responsivas"><i class="fas fa-clipboard-check"></i> Responsivas</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=devolucion_arrendamiento"><i class="fas fa-hand-holding-usd"></i> Devolución en Arrendamiento</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=mantenimiento_externo"><i class="fas fa-tools"></i> Mantenimiento Externo</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=reporte_extravio"><i class="fas fa-exclamation-triangle"></i> Reporte de Extravío</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=reporte_movimiento"><i class="fas fa-truck"></i> Reporte de Movimiento</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=reprogramacion"><i class="fas fa-calendar-alt"></i> Reprogramación</a>
+                <a href="{% url 'activos:ver_equipos' %}?section=salida_retorno"><i class="fas fa-sign-out-alt"></i> Salida y Retorno</a>
+            </div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" class="menu-toggle"><i class="fas fa-code"></i> Software <i class="fas fa-chevron-down"></i></a>
+            <div class="submenu">
+                <a href="{% url 'activos:ver_equipos' %}?section=software"><i class="fas fa-laptop-code"></i> Software</a>
+            </div>
+        </div>
         {% if user.is_authenticated %}
             <a href="{% url 'logout' %}" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
         {% endif %}
@@ -81,7 +125,6 @@
         <div style="display:flex;align-items:center;gap:10px;">
         </div>
         <div style="display:flex;align-items:center;gap:20px;">
-            <i class="fas fa-bell" style="font-size:18px;color:#1a2a47;cursor:pointer;"></i>
             <div style="display:flex;align-items:center;gap:8px;">
                 <div style="background:#1a2a47;color:#fff;border-radius:50%;width:32px;height:32px;display:flex;justify-content:center;align-items:center;">
                     <i class="fas fa-user"></i>
